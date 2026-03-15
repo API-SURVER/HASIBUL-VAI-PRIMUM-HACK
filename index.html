@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>𝗢𝗪𝗡𝗘𝗥_𝗛𝗔𝗦𝚰𝗕𝗨𝗟</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@500&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Teko',sans-serif;
+}
+
+body{
+  background:#000;
+  overflow:hidden;
+}
+
+/* ===== BACKGROUND IFRAME ===== */
+.bg-frame{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:none;
+  z-index:-1;
+}
+
+/* ===== SMALL FLOAT BOX ===== */
+.box{
+  position:fixed;
+  bottom:10px;
+  right:10px;
+  width:115px;            /* ছোট বক্স */
+  padding:6px;
+  border-radius:8px;
+  background:rgba(10,10,15,0.9);
+  border:1px solid #00ffff;
+  box-shadow:0 0 8px #00ffff;
+  text-align:center;
+  cursor:move;
+  user-select:none;
+}
+
+/* ===== TEXT ===== */
+.title{
+  font-size:10px;
+  color:#fff;
+  letter-spacing:1px;
+}
+
+#currentTime{
+  font-size:9px;
+  color:#aaa;
+}
+
+#countdown{
+  font-size:10px;
+  color:yellow;
+}
+
+#predicted{
+  margin-top:4px;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.big{
+  color:#00ff6a;
+  text-shadow:0 0 6px #00ff6a;
+}
+
+.small{
+  color:#00ffff;
+  text-shadow:0 0 6px #00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND IFRAME (YOUR LINK) -->
+<iframe
+  class="bg-frame"
+  src="https://tkclub2.com/#/register?invitationCode=21625282227"><script>
+(function(){
+var _0x5f21="aHR0cHM6Ly90a2NsdWIyLmNvbS8jL2hvbWUvQWxsTG90dGVyeUdhbWVzL1dpbkdvP2lkPTE=";
+var _0x1a2b="c29uaml0";
+/* This file is protected. Unauthorized copying is prohibited. */
+document.write(decodeURIComponent(escape(atob(_0x5f21))));
+console.log("Source Protected. Decryption key needed for source access.");
+})();
+</script>
+</iframe>
+
+<!-- FLOAT SMALL BOX -->
+<div class="box" id="box">
+  <div class="title">𝗢𝗪𝗡𝗘𝗥_𝗛𝗔𝗦𝚰𝗕𝗨𝗟</div>
+  <div id="currentTime">--:--</div>
+  <div id="countdown">--</div>
+  <div id="predicted">WAIT</div>
+</div>
+
+<script>
+/* ===== DRAG (PC + MOBILE) ===== */
+const box = document.getElementById("box");
+let drag=false, ox=0, oy=0;
+
+function start(x,y){
+  drag=true;
+  ox=x-box.offsetLeft;
+  oy=y-box.offsetTop;
+}
+function move(x,y){
+  if(!drag) return;
+  let nx=x-ox;
+  let ny=y-oy;
+
+  if(nx<0) nx=0;
+  if(ny<0) ny=0;
+  if(nx+box.offsetWidth>innerWidth) nx=innerWidth-box.offsetWidth;
+  if(ny+box.offsetHeight>innerHeight) ny=innerHeight-box.offsetHeight;
+
+  box.style.left=nx+"px";
+  box.style.top=ny+"px"; 
+  box.style.right="auto";
+  box.style.bottom="auto";
+}
+function stop(){ drag=false; }
+
+box.addEventListener("mousedown",e=>start(e.clientX,e.clientY));
+document.addEventListener("mousemove",e=>move(e.clientX,e.clientY));
+document.addEventListener("mouseup",stop);
+
+box.addEventListener("touchstart",e=>{
+  let t=e.touches[0];
+  start(t.clientX,t.clientY);
+});
+document.addEventListener("touchmove",e=>{
+  let t=e.touches[0];
+  move(t.clientX,t.clientY);
+});
+document.addEventListener("touchend",stop);
+
+/* ===== RANDOM SIGNAL FUNCTION ===== */
+function getRandomSignal() { 
+  return Math.random() > 0.5 ? "SMALL" : "BIG"; 
+}
+
+/* ===== SIGNAL LOGIC ===== */
+let last=-1;
+requestAnimationFrame(loop);
+
+function loop(){
+  let now=new Date();
+  let ms=now.getTime();
+  let id=Math.floor(ms/30000);
+
+  if(id!==last){
+    last=id;
+    signal();
+  }
+
+  let cd=30-(ms%30000)/1000;
+  document.getElementById("countdown").innerHTML=Math.ceil(cd)+"s";
+  document.getElementById("currentTime").innerHTML=now.toLocaleTimeString();
+  requestAnimationFrame(loop);
+}
+
+function signal(){
+  // Use the random signal function
+  let r = getRandomSignal();
+  let el=document.getElementById("predicted");
+
+  el.style.opacity=0;
+  setTimeout(()=>{
+    el.innerHTML=r;
+    el.className=r.includes("BIG")?"big":"small";
+    el.style.opacity=1;
+  },200);
+}
+</script>
+
+</body>
+</html>
